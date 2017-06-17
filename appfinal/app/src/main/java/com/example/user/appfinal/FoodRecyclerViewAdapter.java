@@ -51,7 +51,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.info_text);
+            myTextView = (TextView) itemView.findViewById(R.id.txt_foodname);
             itemView.setOnClickListener(this);
         }
 
