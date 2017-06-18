@@ -1,79 +1,104 @@
 package com.example.user.appfinal;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.user.appfinal.data.FoodContract;
+
 /**
  * Created by user on 2017/6/17.
  */
 
-public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.ViewHolder>{
+public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.FoodViewHolder>{
 
-    private String[] mData = new String[0];
-    private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
+    private Cursor mCursor;
+    private Context mContext;
 
-    // data is passed into the constructor
-    public FoodRecyclerViewAdapter(Context context, String[] data) {
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+
+    public FoodRecyclerViewAdapter(Context mContext) {
+        this.mContext = mContext;
     }
 
-    // inflates the cell layout from xml when needed
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.grid_recyclerview, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+    public FoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext)
+                .inflate(R.layout.grid_recyclerview, parent, false);
+
+        return new FoodViewHolder(view);
     }
 
-    // binds the data to the textview in each cell
+
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData[position];
-        holder.myTextView.setText(animal);
+    public void onBindViewHolder(FoodViewHolder holder, int position) {
+
+        int idIndex = mCursor.getColumnIndex(FoodContract.FoodEntry._ID);
+        int foodNameIndex = mCursor.getColumnIndex(FoodContract.FoodEntry.COLUMN_FOOD_NAME);
+        int buyTimeIndex = mCursor.getColumnIndex(FoodContract.FoodEntry.COLUMN_BUY_TIME);
+        int alertTimeIndex = mCursor.getColumnIndex(FoodContract.FoodEntry.COLUMN_ALERT_TIME);
+        int remarkIndex = mCursor.getColumnIndex(FoodContract.FoodEntry.COLUMN_REMARK);
+        mCursor.moveToPosition(position);
+
+
+        final int id = mCursor.getInt(idIndex);
+        String fName = mCursor.getString(foodNameIndex);
+        String bTime = mCursor.getString(buyTimeIndex);
+        String aTime = mCursor.getString(alertTimeIndex);
+        String rem = mCursor.getString(remarkIndex);
+
+        holder.itemView.setTag(id);
+        holder.foodNameShow.setText(fName );
+        holder.buyTimeShow.setText(bTime);
+        holder.alertTimeShow.setText(aTime);
+        holder.remarkShow.setText(rem);
+
     }
 
-    // total number of cells
     @Override
     public int getItemCount() {
-        return mData.length;
+        if (mCursor == null) {
+            return 0;
+        }
+        return mCursor.getCount();
+    }
+
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
+
+        //check if this is a valid cursor, then update the cursor
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 
 
-    // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView myTextView;
 
-        public ViewHolder(View itemView) {
+    class FoodViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView foodNameShow;
+        private TextView buyTimeShow;
+        private TextView alertTimeShow;
+        private TextView remarkShow;
+
+        public FoodViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.txt_foodname);
-            itemView.setOnClickListener(this);
+
+            foodNameShow = (TextView) itemView.findViewById(R.id.txt_showfoodname);
+            buyTimeShow = (TextView) itemView.findViewById(R.id.txt_buytime);
+            alertTimeShow = (TextView)itemView.findViewById(R.id.txt_alerttime);
+            remarkShow = (TextView)itemView.findViewById(R.id.txt_remark);
         }
 
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
     }
-
-    // convenience method for getting data at click position
-    public String getItem(int id) {
-        return mData[id];
-    }
-
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
 }

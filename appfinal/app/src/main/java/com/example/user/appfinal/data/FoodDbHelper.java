@@ -12,7 +12,7 @@ import com.example.user.appfinal.data.FoodContract.FoodEntry;
 public class FoodDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "foodstoreDb.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     FoodDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -21,7 +21,6 @@ public class FoodDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // Create tasks table (careful to follow SQL formatting rules)
         final String CREATE_TABLE = "CREATE TABLE "  + FoodEntry.TABLE_NAME + " (" +
                 FoodEntry._ID                + " INTEGER PRIMARY KEY, " +
                 FoodEntry.COLUMN_FOOD_NAME + " TEXT NOT NULL, " +

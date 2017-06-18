@@ -12,6 +12,7 @@
     <string name="remind_key">msg</string>
     <string name="remind_value">notification</string>
     <string name="task_id_key">id</string>
+    <string name="add_button">加入</string>
 
     <string-array name="time_choice">
         <item>30秒</item>

@@ -17,6 +17,7 @@ import static com.example.user.appfinal.data.FoodContract.FoodEntry.TABLE_NAME;
  */
 
 public class FoodContentProvider extends ContentProvider {
+
     public static final int TASKS = 200;
     public static final int TASK_WITH_ID = 201;
 
