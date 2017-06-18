@@ -1,5 +1,6 @@
 package com.example.user.appfinal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,12 +10,13 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.user.appfinal.data.FoodContract;
 
@@ -31,22 +33,20 @@ public class ChildActivity extends AppCompatActivity
     private FoodRecyclerViewAdapter mAdapter;
     RecyclerView mRecyclerView;
 
-    private Toast mToast;
-    private static  String choice = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.food_show);
 
-        int numberOfColumns = 2;
-        String[] data = {"1", "2", "3", "4",};
-
         mRecyclerView= (RecyclerView) findViewById(R.id.rvNumbers);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        int numberOfColumns = 1;
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+
         mAdapter = new FoodRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -69,8 +69,6 @@ public class ChildActivity extends AppCompatActivity
             }
         }).attachToRecyclerView(mRecyclerView);
 
-//
-//        mAdapter.setClickListener(this);
         FloatingActionButton fabButton = (FloatingActionButton) findViewById(R.id.fab);
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +78,10 @@ public class ChildActivity extends AppCompatActivity
             }
         });
 
+
         getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
     }
+
 
     @Override
     protected void onResume() {
@@ -138,6 +138,26 @@ public class ChildActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_foodshow, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemThatWasClickedId = item.getItemId();
+        if (itemThatWasClickedId == R.id.action_BacktoMain) {
+            Context context = ChildActivity.this;
+            Class destinationActivity = MainActivity.class;
+            Intent backToMainActivityIntent = new Intent(context, destinationActivity);
+            startActivity(backToMainActivityIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 
 

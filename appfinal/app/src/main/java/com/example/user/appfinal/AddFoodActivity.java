@@ -13,6 +13,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.user.appfinal.data.FoodContract;
+import com.example.user.appfinal.sync.ReminderUtilities;
+
+import java.util.Calendar;
 
 
 /**
@@ -63,20 +66,27 @@ public class AddFoodActivity extends AppCompatActivity {
         if (input.length() == 0) {
             return;
         }
-        String remarkinput = ((EditText) findViewById(R.id.et_foodinput)).getText().toString();
+        String remarkinput = ((EditText) findViewById(R.id.et_remarkinput)).getText().toString();
 
         String D = String.valueOf(mDatePicker.getDayOfMonth());
         String M = String.valueOf(mDatePicker.getMonth());
         String fullDay = M+"/"+D;
 
+        Calendar c = Calendar.getInstance();
+        int second =  c.get(Calendar.SECOND);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int id = 8;
+
         ContentValues contentValues = new ContentValues();
-        contentValues.put(FoodContract.FoodEntry.COLUMN_FOOD_NAME, input);
+        contentValues.put(FoodContract.FoodEntry.COLUMN_FOOD_NAME,input);
         contentValues.put(FoodContract.FoodEntry.COLUMN_BUY_TIME, fullDay);
         contentValues.put(FoodContract.FoodEntry.COLUMN_ALERT_TIME, ch);
         contentValues.put(FoodContract.FoodEntry.COLUMN_REMARK,remarkinput);
 
         Uri uri = getContentResolver().insert(FoodContract.FoodEntry.CONTENT_URI, contentValues);
 
+        ReminderUtilities.scheduleChargingReminder(this,id, hour, minute,second);
         finish();
 
     }
