@@ -50,7 +50,7 @@ public class FoodContentProvider extends ContentProvider {
             case TASKS:
                 long id = db.insert(TABLE_NAME, null, values);
                 if ( id > 0 ) {
-                    returnUri = ContentUris.withAppendedId(FoodContract.FoodEntry.CONTENT_URI, id);
+                    returnUri = ContentUris.withAppendedId(FoodContract.CONTENT_URI, id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -112,7 +112,6 @@ public class FoodContentProvider extends ContentProvider {
         if (tasksDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-
 
         return tasksDeleted;
     }

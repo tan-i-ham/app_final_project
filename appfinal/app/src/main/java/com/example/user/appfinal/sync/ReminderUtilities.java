@@ -11,6 +11,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,8 +24,8 @@ public class ReminderUtilities {
     private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
 
-    private static final String REMINDER_JOB_TAG = "hydration_reminder_tag";
-
+    private static final String REMINDER_JOB_TAG = "food_reminder_tag";
+    private static final String READY__TAG = "ready-sync";
 
     private static boolean sInitialized;
 
@@ -42,13 +43,13 @@ public class ReminderUtilities {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-//        Calendar now = Calendar.getInstance();
-//        Calendar schedule = Calendar.getInstance();
-//        schedule.set(Calendar.HOUR_OF_DAY, hourOfDay);
-//        schedule.set(Calendar.MINUTE, minute);
-//        schedule.set(Calendar.SECOND, second);
+        Calendar now = Calendar.getInstance();
+        Calendar schedule = Calendar.getInstance();
+        schedule.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        schedule.set(Calendar.MINUTE, minute);
+        schedule.set(Calendar.SECOND, second);
 
-//        int scheduleTime = (int) ((schedule.getTimeInMillis() - now.getTimeInMillis()) / 1000);
+        int scheduleTime = (int) ((schedule.getTimeInMillis() - now.getTimeInMillis()) / 1000);
 
         Bundle bundle = new Bundle();
         bundle.putInt("ID", taskId);
@@ -57,10 +58,10 @@ public class ReminderUtilities {
                 .setService(FoodReminderFirebaseJobService.class)
                 .setTag(REMINDER_JOB_TAG)
                 .setLifetime(Lifetime.FOREVER)
-                .setRecurring(true)
+                .setRecurring(false)
                 .setTrigger(Trigger.executionWindow(
-                        0,
-                        20))
+                        scheduleTime,
+                        scheduleTime+10))
                 .setReplaceCurrent(true)
                 .build();
 
@@ -71,6 +72,10 @@ public class ReminderUtilities {
     }
 
 
+    public static void cancelSchedule(@NonNull final Context context,  int id) {
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        dispatcher.cancel(READY__TAG + id);
 
-
+    }
 }

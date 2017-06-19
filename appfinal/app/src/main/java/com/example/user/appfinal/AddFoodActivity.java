@@ -1,5 +1,6 @@
 package com.example.user.appfinal;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,24 +70,24 @@ public class AddFoodActivity extends AppCompatActivity {
         String remarkinput = ((EditText) findViewById(R.id.et_remarkinput)).getText().toString();
 
         String D = String.valueOf(mDatePicker.getDayOfMonth());
-        String M = String.valueOf(mDatePicker.getMonth());
+        String M = String.valueOf(mDatePicker.getMonth()+1);
         String fullDay = M+"/"+D;
 
-        Calendar c = Calendar.getInstance();
-        int second =  c.get(Calendar.SECOND);
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int id = 8;
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(FoodContract.FoodEntry.COLUMN_FOOD_NAME,input);
         contentValues.put(FoodContract.FoodEntry.COLUMN_BUY_TIME, fullDay);
         contentValues.put(FoodContract.FoodEntry.COLUMN_ALERT_TIME, ch);
         contentValues.put(FoodContract.FoodEntry.COLUMN_REMARK,remarkinput);
 
-        Uri uri = getContentResolver().insert(FoodContract.FoodEntry.CONTENT_URI, contentValues);
+        Calendar c = Calendar.getInstance();
+        int second =  c.get(Calendar.SECOND);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
 
-        ReminderUtilities.scheduleChargingReminder(this,id, hour, minute,second);
+        Uri id = getContentResolver().insert(FoodContract.CONTENT_URI, contentValues);
+
+        ReminderUtilities.scheduleChargingReminder(this,(int) ContentUris.parseId(id), hour, minute,second);
         finish();
 
     }

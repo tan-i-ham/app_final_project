@@ -8,29 +8,71 @@
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="110dp"
-    android:weightSum="1"
-    tools:context=".MainActivity">
+   android:paddingTop="16dp"
+    tools:context=".MainActivity"
+    android:stretchColumns="1">
 
-    <Button
-        android:id="@+id/b_do_something_cool"
-        android:layout_width="195dp"
-        android:layout_height="160dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="32dp"
-        android:background="#00BFFF"
-        android:text="宿舍冰箱"
-        android:textSize="25sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+       >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center">
 
-    <Button
-        android:id="@+id/buttonhome"
-        android:layout_width="195dp"
-        android:layout_height="160dp"
-        android:layout_gravity="center"
-        android:layout_weight="0.01"
-        android:background="#00BFFF"
-        android:text="家庭冰箱"
-        android:textSize="25sp" />
+            <ImageButton
+                android:id="@+id/btschool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/a1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="宿舍冰箱"
+                android:textColor="@color/colorWhite"
+                android:layout_gravity="center"
+                android:textSize="25sp"/>
+        </FrameLayout>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center">
+
+
+
+            <ImageButton
+                android:id="@+id/bthome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a2"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="家庭冰箱"
+                android:textColor="@color/colorWhite"
+                android:layout_gravity="center"
+                android:textSize="25sp" />
+        </FrameLayout>
+    </LinearLayout>
+
 
 </LinearLayout>
 

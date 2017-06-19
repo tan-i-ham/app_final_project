@@ -60,11 +60,14 @@ public class ChildActivity extends AppCompatActivity
                 int id = (int) viewHolder.itemView.getTag();
 
                 String stringId = Integer.toString(id);
-                Uri uri = FoodContract.FoodEntry.CONTENT_URI;
+                Uri uri = FoodContract.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(stringId).build();
 
                 getContentResolver().delete(uri, null, null);
+
                 getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, ChildActivity.this);
+
+
 
             }
         }).attachToRecyclerView(mRecyclerView);
@@ -107,7 +110,7 @@ public class ChildActivity extends AppCompatActivity
             @Override
             public Cursor loadInBackground() {
                 try {
-                    return getContentResolver().query(FoodContract.FoodEntry.CONTENT_URI,
+                    return getContentResolver().query(FoodContract.CONTENT_URI,
                             null,
                             null,
                             null,
